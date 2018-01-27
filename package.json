@@ -1,0 +1,37 @@
+{
+  "name": "schmidty",
+  "version": "1.0.0",
+  "description": "first test application",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/initialize.js && mocha tests/test.js && yarn lint",
+    "lint": "eslint ./**/*.js",
+    "start": "node index.js",
+    "migrate": "knex migrate:latest --knexfile services/db/knexfile.js",
+    "rollback": "knex migrate:rollback --knexfile services/db/knexfile.js "
+  },
+  "author": "RP-3 <sarith21@gmail.com> (http://suchisthepowerofjs.com/)",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "knex": "^0.13.0",
+    "moment": "^2.18.1",
+    "morgan": "^1.8.2",
+    "node-fetch": "^1.7.3",
+    "pg": "^6.4.2",
+    "pg-native": "^1.10.1"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "expect": "^1.20.2",
+    "mocha": "^3.4.2",
+    "should": "^11.2.1"
+  }
+}
