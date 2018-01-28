@@ -33,8 +33,8 @@ module.exports = (services) => {
    * delete a single geocode
    */
   router.delete('', (request, respone) =>
-    services.db.geocodes.delete({ address: request.body.address })
-      .then(geocode => respone.status(201).json(geocode.serialize()))
+    services.db.geocodes.delete()
+      .then(statusResponse => respone.status(201).json(statusResponse))
       .catch(error => respone.status(400).send(error.message)));
 
   return router;

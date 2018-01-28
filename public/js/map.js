@@ -1,18 +1,41 @@
-window.onload = () => {
-  const map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 3,
-    center: { lat: 0, lng: 0 },
-  });
-  
-function initMap() {
-  
+const markers = [];
+let map;
 
-  document.getElementById('submit').addEventListener('click', () => {
-    geocodeAddress(map);
+function removeMarkers() {
+  fetch(
+    'http://localhost:3000/api/geocodes',
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+    },
+  ).then(() => {
+    for (let i = 0; i < markers.length; i += 1) {
+      markers[i].setMap(null);
+    }
   });
 }
 
-function geocodeAddress(map) {
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 3,
+    center: { lat: 0, lng: 0 },
+  });
+
+  google.maps.event.addDomListener(
+    document.getElementById('delete'),
+    'click',
+    removeMarkers,
+  );
+
+  document.getElementById('submit').addEventListener('click', () => {
+    geocodeAddress();
+  });
+}
+
+function geocodeAddress() {
   const address = document.getElementById('address').value;
   fetch(
     'http://localhost:3000/api/geocodes',
@@ -33,29 +56,32 @@ function geocodeAddress(map) {
       });
       // To add the marker to the map, call setMap();
       marker.setMap(map);
+
+      markers.push(marker);
     });
 }
 
-console.log(1);
-  fetch(
-    'http://localhost:3000/api/geocodes',
-    {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'GET',
+// load initially all existing geocodes
+fetch(
+  'http://localhost:3000/api/geocodes',
+  {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
     },
-  )
-    .then(response => response.json())
-    .then((json) => {
-      json.map((pointer) => {
-        const marker = new google.maps.Marker({
-          position: { lat: pointer.latitude, lng: pointer.longitude },
-          title: pointer.address,
-        });
-        // To add the marker to the map, call setMap();
-        marker.setMap(map);
+    method: 'GET',
+  },
+)
+  .then(response => response.json())
+  .then((json) => {
+    json.forEach((pointer) => {
+      const marker = new google.maps.Marker({
+        position: { lat: pointer.latitude, lng: pointer.longitude },
+        title: pointer.address,
       });
+      // To add the marker to the map, call setMap();
+      marker.setMap(map);
+
+      markers.push(marker);
     });
-};
+  });

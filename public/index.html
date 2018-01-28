@@ -8,11 +8,12 @@
   </head>
   <body>
     <div id="floating-panel">
-      <input id="address" type="textbox" value="Sydney, NSW" class="address">
+      <input id="address" type="textbox" value="" placeholder="Sydney" class="address">
       <input id="submit" type="button" value="Geocode" class="submit">
+      <input id="delete" type="button" value="reset" class="delete">
     </div>
     <div id="map"></div>
-    <script src="js/map.js" async defer></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCd2uYZfYnzmGCb59AV8s7tLbJKWp4e2U4&callback=initMap"></script>
+    <script src="js/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCd2uYZfYnzmGCb59AV8s7tLbJKWp4e2U4&callback=initMap"></script>
   </body>
 </html>
