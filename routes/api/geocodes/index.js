@@ -4,10 +4,14 @@ module.exports = (services) => {
   /**
    * store a new geocode
    */
-  router.post('', (request, respone) =>
-    services.db.geocodes.create({ address: request.body.address })
-      .then(geocode => respone.status(201).json(geocode.serialize()))
-      .catch(error => respone.status(400).send(error.message)));
+  router.post('', (request, respone) => {
+    return services.db.geocodes.create({ address: request.body.address })
+      .then(geocode => {
+        console.log(11111111, geocode);
+        return respone.status(201).json(geocode.serialize())
+      })
+      .catch(error => respone.status(400).send(error.message));
+  });
 
   /**
    * load all geocodes

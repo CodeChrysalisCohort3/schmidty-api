@@ -1,5 +1,4 @@
 const Geocoder = require('./modules/Geocoder');
-const Get = require('./get');
 
 module.exports = (knex, EntityGeocode) => (params) => {
   // address exists?
@@ -7,35 +6,27 @@ module.exports = (knex, EntityGeocode) => (params) => {
     throw new Error('please add a address');
   }
 
-  Geocoder.geocode(params.address)
-    .then((response) => {
-      response.json().then((json) => {
-        // error-handling
-        if (json.results.length === 0) {
-          throw Error(`no geocode found for the address ${params.address}`);
-        }
-        if (json.results.length > 1) {
-          throw Error(`address is not unique enough. found more geocodes for ${params.address}`);
-        }
-        if (json.status !== 'ok') {
-          throw Error(json.status);
-        }
-        const singleGeocode = json.results[0];
+  return Geocoder.geocode(params.address)
+    .then(response => response.json())
+    .then((json) => {
+      // error-handling
+      if (json.results.length === 0) {
+        throw Error(`no geocode found for the address ${params.address}`);
+      }
+      if (json.results.length > 1) {
+        throw Error(`address is not unique enough. found more geocodes for ${params.address}`);
+      }
+      if (json.status !== 'OK') {
+        throw Error(json.status);
+      }
+      const singleGeocode = json.results[0];
 
-        knex('geocodes').insert({
-          latitude: singleGeocode.geometry.location.lat,
-          longitude: singleGeocode.geometry.location.lon,
-
-          types: singleGeocode.types.join(','),
-          address: params.address,
-        }).then(() => {
-          const getRequest = Get(knex, EntityGeocode);
-          return getRequest({
-            latitude: params.latitude,
-            longitude: params.longitude,
-          });
-        });
-      });
+      const data = {
+        latitude: singleGeocode.geometry.location.lat,
+        longitude: singleGeocode.geometry.location.lng,
+        // types: singleGeocode.types.join(','),
+        address: params.address,
+      };
+      return knex('geocodes').insert(data).then(() => new EntityGeocode(data));
     });
-};
-
+}

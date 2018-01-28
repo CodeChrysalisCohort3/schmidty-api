@@ -1,4 +1,4 @@
-module.exports = (knex, EntityGeocode) =>
+module.exports = async (knex, EntityGeocode) =>
   /**
    * @param object params
    */

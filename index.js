@@ -33,9 +33,8 @@ app.use((err, req, res, next) => {
   }
 
   services.logger.log(err);
-  const errorStack = Array.from(err).join(' | ');
   console.log(err);
-  return res.status(500).send(`Internal Error.${errorStack}`);
+  return res.status(500).send(`Internal Error.${err.message} `);
 });
 
 /**
