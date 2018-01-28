@@ -24,7 +24,6 @@ module.exports = (knex, EntityGeocode) => (params) => {
       const data = {
         latitude: singleGeocode.geometry.location.lat,
         longitude: singleGeocode.geometry.location.lng,
-        // types: singleGeocode.types.join(','),
         address: params.address,
       };
       return knex('geocodes').insert(data).then(() => new EntityGeocode(data));

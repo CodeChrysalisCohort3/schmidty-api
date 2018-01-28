@@ -4,14 +4,22 @@ module.exports = (services) => {
   /**
    * store a new geocode
    */
-  router.post('', (request, respone) => {
-    return services.db.geocodes.create({ address: request.body.address })
-      .then(geocode => {
-        console.log(11111111, geocode);
-        return respone.status(201).json(geocode.serialize())
-      })
-      .catch(error => respone.status(400).send(error.message));
-  });
+  router.post('', (request, respone) =>
+    services.db.geocodes.create({ address: request.body.address })
+      .then(geocode => respone.status(201).json(geocode.serialize()))
+      .catch(error => respone.status(400).send(error.message)));
+
+  /**
+   * update the address from the given latitude & lontitude
+   */
+  router.update('', (request, respone) =>
+    services.db.geocodes.update({
+      address: request.body.address,
+      latitude: request.body.latitude,
+      longitude: request.body.longitude,
+    })
+      .then(geocode => respone.status(201).json(geocode.serialize()))
+      .catch(error => respone.status(400).send(error.message)));
 
   /**
    * load all geocodes
@@ -30,7 +38,7 @@ module.exports = (services) => {
     .catch(error => respone.status(400).send(error.message)));
 
   /**
-   * delete a single geocode
+   * delete all stored geocodes
    */
   router.delete('', (request, respone) =>
     services.db.geocodes.delete()
